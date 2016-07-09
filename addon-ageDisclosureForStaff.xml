@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="ageDisclosureForStaff" title="[kiror] Don't hide your age from staff" version_string="0.0" version_id="0" url="https://github.com/adlerosn/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners/>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="displaying_dob_to_staff_independently_of_privacy" version_id="0" version_string="0.0"><![CDATA[Displaying date of birthday to staff independently of privacy]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates/>
+  <public_template_modifications>
+    <modification template="member_card" modification_key="addforcedlyageinmembercard" description="Adds forcedly user's age in member card for staff" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:if is="{$canViewOnlineStatus}">
+			<dl class="pairsInline lastActivity">]]></find>
+      <replace><![CDATA[<xen:if is="{$user.dob_month} AND {$user.dob_day} AND {$user.dob_year} AND !({$user.show_dob_year} AND {$user.show_dob_date})">
+<xen:if is="{$visitor.is_staff} OR {$visitor.is_admin} OR {$visitor.is_moderator}">
+		<dl class="pairsInline lastActivity">
+<dt>{xen:phrase displaying_dob_to_staff_independently_of_privacy} (MM/DD/YYYY):</dt><dd>
+{$user.dob_month}/{$user.dob_day}/{$user.dob_year}
+</dd><br />
+		</dl>
+</xen:if>
+</xen:if>
+		$0]]></replace>
+    </modification>
+    <modification template="member_view" modification_key="addforcedlyageinmemberview" description="Adds forcedly user's age in member view for staff" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:if is="{$birthday}">
+											<dl><dt>{xen:phrase birthday}:</dt> <dd>{xen:date $birthday.timeStamp, $birthday.format} <xen:if is="{$birthday.age}">({xen:phrase age}: {xen:number $birthday.age})</xen:if></dd></dl>
+										</xen:if>]]></find>
+      <replace><![CDATA[$0
+<xen:if is="{$user.dob_month} AND {$user.dob_day} AND {$user.dob_year} AND !({$user.show_dob_year} AND {$user.show_dob_date})">
+<xen:if is="{$visitor.is_staff} OR {$visitor.is_admin} OR {$visitor.is_moderator}">
+<dl>
+<dt>{xen:phrase displaying_dob_to_staff_independently_of_privacy} (MM/DD/YYYY):</dt><dd>
+{$user.dob_month}/{$user.dob_day}/{$user.dob_year}
+</dd><br />
+		</dl>
+</xen:if>
+</xen:if>]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
